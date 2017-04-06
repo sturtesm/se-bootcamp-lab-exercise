@@ -1,4 +1,4 @@
-I# SE-LAB-BOOTCAMP
+# SE-LAB-BOOTCAMP
 Repository for the SE Bootcamp Lab
 
 # Lab Pre-Reqs
@@ -154,10 +154,12 @@ We need to configure the Agent to talk to the Controller we've installed on the 
 
 We need to correctly set the following attributes:
 
-+ <controller-host></controller-host>
-+ <controller-port></controller-port>
-+ <account-access-key></account-access-key>
-+ <application-name></application-name>
+```
+   - <controller-host></controller-host>
+   - <controller-port></controller-port>
+   - <account-access-key></account-access-key>
+   - <application-name></application-name>
+```
 
 You can get the access key information from your Controller UI.  You can choose any name from the application-name.
 
