@@ -292,6 +292,7 @@ The operations team we're working with struggles to get visibility into their ba
 * **HOST** localhost
 * **USER** monitor
 * **PORT** 3306
+* **PASSWORD** l3tm31n
 
 ```
 ubuntu@sebootcamplab:~/SE-LAB-BOOTCAMP/lab/source/mysql-database$ mysql -h localhost -P 3306 --protocol=tcp -u monitor -p
