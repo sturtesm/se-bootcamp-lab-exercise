@@ -10,9 +10,9 @@ After installing the controller, lab owners or participants should load the ***l
 
 ## Ravello Blueprint
 
-The ***se-botcamp-lab-4.3-bp*** Ravello lab blueprint contains 2 VMs - a Lab VM, and Controller VM.  We have bridged the VMs enabling the application tier to communicate with the controller using Ravello's internal network.
+The ***se-botcamp-lab-4.3-v1.2-bp*** Ravello lab blueprint contains 2 VMs - a Lab VM, and Controller VM.  We have bridged the VMs enabling the application tier to communicate with the controller using Ravello's internal network.
 
-[https://cloud.ravellosystems.com/#/0/library/blueprints/80152682/canvas](https://cloud.ravellosystems.com/#/0/library/blueprints/80152682/canvas)
+[https://cloud.ravellosystems.com/#/0/library/blueprints/83624181/canvas](https://cloud.ravellosystems.com/#/0/library/blueprints/83624181/canvas)
 
 ![4.3 Controller](images/ravello-lab-canvas.png)
 
@@ -81,7 +81,6 @@ total 900268
 -rw-r--r-- 1 ubuntu ubuntu  16185484 Mar 30 01:31 AppServerAgent-4.3.0.0.zip
 -rw-r--r-- 1 ubuntu ubuntu 819171319 Mar 30 01:38 controller_64bit_linux-4.3.0.0.sh
 -rw-r--r-- 1 ubuntu ubuntu  86506512 Mar 30 01:39 dbagent-4.3.0.0.zip
--rw-r--r-- 1 ubuntu ubuntu      2833 Mar 30 02:13 license.lic
 ```
 
 ## Installing the Controller
@@ -92,16 +91,22 @@ Check with your lab leader first.  If it hasn't already been done, start by inst
 
 You'll find a 4.3 distribution pre-staged in the `artifacts` sub-folder, and should find clear documentation on [https://docs.appdynamics.com/](https://docs.appdynamics.com/).
 
-Once the controller is installed, update the license file by using the one provided in `artifacts/license.lic`.
-
 It should take you less than 20-minutes to install the controller.  When you're done, login to the controller and show a lab helper that you've completed the first step.
 
 ![4.3 Controller](images/appd-43-controller.png)
 
+<p><p>
+
+```
+*NOTE*
+
+YOU MUST UPDATE THE LICENSE FILE to complete the Controller Installation
+```
 
 ### Hints
 * Our customer is OK with the default ports, no changes are needed
 * Make sure to document all usernames and passwords that you create
+* Licenses can be downloaded from the AppDynamics self-service license portal
 
 
 ### Questions to consider
@@ -154,12 +159,10 @@ We need to configure the Agent to talk to the Controller we've installed on the 
 
 We need to correctly set the following attributes:
 
-```
-   - <controller-host></controller-host>
-   - <controller-port></controller-port>
-   - <account-access-key></account-access-key>
-   - <application-name></application-name>
-```
++ <controller-host></controller-host>
++ <controller-port></controller-port>
++ <account-access-key></account-access-key>
++ <application-name></application-name>
 
 You can get the access key information from your Controller UI.  You can choose any name from the application-name.
 
@@ -167,7 +170,7 @@ You can get the access key information from your Controller UI.  You can choose 
 
 `NOTE**` The application build scripts will take care of setting the Tier and Node properties, these don't need to be set in controller-info.xml.`
 
-## Updating the Agent
+## Updating the Agent [Lab Admins]
 Agent updates can be dropped in as normal.
 
 For lab admins that want to update the Agent, either in the Ravello blueprint or the application, make sure to copy *custom-activity-correlation.xml* from ${SE-LAB-BOOTCAMP}/lab/artifacts/custom-activity-correlation.xml to /opt/appdynamics/agent/appserver-agent/verx.x.x.x/conf/custom-activity-correlation.xml.  
@@ -292,7 +295,6 @@ The operations team we're working with struggles to get visibility into their ba
 * **HOST** localhost
 * **USER** monitor
 * **PORT** 3306
-* **PASSWORD** appd123
 
 ```
 ubuntu@sebootcamplab:~/SE-LAB-BOOTCAMP/lab/source/mysql-database$ mysql -h localhost -P 3306 --protocol=tcp -u monitor -p
@@ -508,10 +510,6 @@ How can we use AppDynamics to prove what's happening?
 ### Challenge Sign-off
 Use AppDynamics to explain your ***evidence*** to a lab leader.
 
-
-
-# APM Guru (+150 points)
-
 ## Broken End-to-End Correlation
 
 Initial instrumentation of our application has been successful, but there are several breaks in correlation between our our web and data service tiers and we're not seeing the end-to-end correlation that we expect.
@@ -554,3 +552,82 @@ What feature in AppDynamics could help troubleshoot and resolve this problem, **
 + The custom correlation file is only provided as an example of where the downstream instrumentation is set, this problem can be solved 100% in the user interface.
 + Are there any anomalies in the business transaction list that might point to a problem?
 
+
+## Analytics (Business iQ)
+
+### Transaction Analytics (+50 points)
+Analytics can be enabled for on-premises controllers in low volume environments using the **Embedded Events Service** - [Embedded Events Service](https://singularity.jira.com/wiki/display/SALESENG/Business+iQ+-+Level+1+-+Architecture#BusinessiQ-Level1-Architecture-EmbeddedEventsService).
+
+Imagine you are working with a customer and want to demonstrate an initial example of business iQ, something to get the conversation started around the *art of the possible*.
+
+Setup the embedded events service, enable transaction analytics for **ALL** Business Transactions and derive an interesting observation and visualization.  
+
+### Log Analytics (+50 points)
+Enable log analytics to ingest and extract the agent log files in your environment.  The agent is installed in - ***/opt/appdynamics/agent/appserver-agent***.
+
+
+
+# APM Guru (+150 points)
+
+
+## Custom Correlation
+
+The lab source code can be found here - [https://github.com/Appdynamics/SE-LAB-BOOTCAMP](https://github.com/Appdynamics/SE-LAB-BOOTCAMP).
+
+Whenever a downstream call is made from the **API Services Tier**, an AppDynamics Correlator is passed into the request header.  
+
+The Service Request is handled by the downstream tier, where all headers are extracted and placed into a **Map<String, String>** object.  Because of how JBoss' REST Services are implemented, AppDynamics is not able to automatically extract and correlate the requests.  
+
+However, the **Map<String, String>** object is available, with the correlator, in the **getUserProfile()** method.  
+
+Although it is already done for you in the lab, build the cust correlation need to properly correlate the upstream calls.  Be prepared to show and explain your work.
+
+ 
+```
+
+package com.appdynamics.sample.service;
+
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.log4j.Logger;
+
+public abstract class DataServices {
+
+	Logger logger = Logger.getLogger(DataServices.class);
+	
+	/**
+	 * process the request context so we can create correlation
+	 */
+	public Map<String, String> processRequestContext(HttpServletRequest context) {
+		Enumeration<String> headers = context.getHeaderNames();
+		
+		Map<String, String> map = new HashMap<String, String> ();
+
+		while (headers.hasMoreElements()) {
+			String key = headers.nextElement();
+			String value = context.getHeader(key);
+			
+			logger.debug("Adding header " + key + "=" + value + " to Map");
+			
+			map.put(key, value);
+		}
+		
+		return map;	
+	}
+	
+	/**
+	 * 
+	 * @param requestContext
+	 */
+	public String getUserProfile(Map<String, String> requestContextMap)
+	{
+		return getUserProfileImpl(requestContextMap);
+	}
+	
+	protected abstract String getUserProfileImpl(Map<String, String> requestContextMap);
+}
+```
