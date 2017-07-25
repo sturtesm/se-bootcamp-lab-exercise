@@ -51,7 +51,7 @@ Each lab participant will be given a unique Ravello Application Instance, which 
 
 If your instance is stopped, which will typically happen each night, all configuration and progress will be saved provided you don't delete your application from Ravello all together.
 
-To start your instance, you can log into the SE Ravello Account [https://www.ravellosystems.com/](https://www.ravellosystems.com/), find your dedicated application instance and simply restart it.  **Or**, if you weren't given a dedicated instance simply create a new application instance of the **se-enablement-bootcamp-4.3-bp**.
+To start your instance, you can log into the SE Ravello Account [https://www.ravellosystems.com/](https://www.ravellosystems.com/), find your dedicated application instance and simply restart it.  **OR**, if you weren't given a dedicated instance simply create a new application instance of the **se-enablement-bootcamp-4.3-bp**.
 
 **NOTE** The instance may take a few minutes to start, which is normal.
 
@@ -67,13 +67,11 @@ The username to your Ravello instance is *ubuntu*.
 ssh -i 4_3_Enablement.pem ubuntu@seenablementbootca-seenablementbootca-jxgau5cv.srv.ravcloud.com
 ```
 
-
-
 # Installation
 
 ## Download Artifacts
 
-All artifacts needed for your lab have been pre-staged to the `artifacts` folder:
+All artifacts needed for your lab have been pre-staged to the `artifacts` folder; for example:
 
 ```
 ubuntu@seenablementbootca:~$ ls -l artifacts/
@@ -82,6 +80,8 @@ total 900268
 -rw-r--r-- 1 ubuntu ubuntu 819171319 Mar 30 01:38 controller_64bit_linux-4.3.0.0.sh
 -rw-r--r-- 1 ubuntu ubuntu  86506512 Mar 30 01:39 dbagent-4.3.0.0.zip
 ```
+
+You should use the ***LATEST*** installation artifacts available.
 
 ## Installing the Controller
 
@@ -159,14 +159,17 @@ We need to configure the Agent to talk to the Controller we've installed on the 
 
 We need to correctly set the following attributes:
 
-+ <controller-host></controller-host>
-+ <controller-port></controller-port>
-+ <account-access-key></account-access-key>
-+ <application-name></application-name>
+```
+<controller-host></controller-host>
 
-You can get the access key information from your Controller UI.  You can choose any name from the application-name.
+<controller-port></controller-port>
 
-`NOTE*` Make sure you use the FQDN of your Ravello VM for the **controller-host** property, as opposed to **localhost** or **127.0.0.1**.  All application services will be running inside Docker containers, and will not properly link to localhost network configurations.`
+<account-access-key></account-access-key>
+
+<application-name>SE Bootcamp Lab</application-name>
+```
+
+You can get the access key information from your Controller UI.  You ***MUST*** use *SE Bootcamp Lab* as the application name.
 
 `NOTE**` The application build scripts will take care of setting the Tier and Node properties, these don't need to be set in controller-info.xml.`
 
@@ -295,6 +298,7 @@ The operations team we're working with struggles to get visibility into their ba
 * **HOST** localhost
 * **USER** monitor
 * **PORT** 3306
+* **PASSWORD** l3tm31n
 
 ```
 ubuntu@sebootcamplab:~/SE-LAB-BOOTCAMP/lab/source/mysql-database$ mysql -h localhost -P 3306 --protocol=tcp -u monitor -p
@@ -482,7 +486,7 @@ Configure an exit point so that AppDynamics can explicitly break out, and measur
 
 ### Configuration Help
 
-Our dev team is using a Mongo Client Framework, there are several points in the framework wherey queries to Mongo can happen, but it's always in a method name ***find*** within a Class that implements the ***com.mongodb.client.MongoCollection*** interface.
+Our dev team is using a Mongo Client Framework, there are several points in the framework where queries to Mongo can happen, but it's always in a method name ***find*** within a Class that implements the ***com.mongodb.client.MongoCollection*** interface.
 
 While you could create a rule that applies to all tiers in the application, our dev team's feedback is that you really only need to create the rule against the ***docker-data-services-v2*** Tier.
 
@@ -495,6 +499,10 @@ While you could create a rule that applies to all tiers in the application, our 
 
 
 # Master Craftsman (+100 points per-challenge)
+
+## SVM Docker Visibility Monitoring
+
+Install and configure the SVM Agent so that it gives you visibility into the performance of the underlying Docker containers.
 
 ## Is it the Database or the Application?
 
@@ -574,7 +582,7 @@ Enable log analytics to ingest and extract the agent log files in your environme
 
 The lab source code can be found here - [https://github.com/Appdynamics/SE-LAB-BOOTCAMP](https://github.com/Appdynamics/SE-LAB-BOOTCAMP).
 
-Whenever a downstream call is made from the **API Services Tier**, an AppDynamics Correlator is passed into the request header.  
+Whenever a downstream call is made from the **Docker-Web-Tier** to the **API Services Tier**, an AppDynamics Correlator is passed into the request header.  
 
 The Service Request is handled by the downstream tier, where all headers are extracted and placed into a **Map<String, String>** object.  Because of how JBoss' REST Services are implemented, AppDynamics is not able to automatically extract and correlate the requests.  
 
