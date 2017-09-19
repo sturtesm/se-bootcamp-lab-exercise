@@ -10,7 +10,7 @@ After installing the controller, lab owners or participants should load the ***l
 
 ## Ravello Blueprint
 
-The ***se-botcamp-lab-4.3-v1.2-bp*** Ravello lab blueprint contains 2 VMs - a Lab VM, and Controller VM.  We have bridged the VMs enabling the application tier to communicate with the controller using Ravello's internal network.
+The ***se-bootcamp-lab-4.3.3.7-bp*** Ravello lab blueprint contains 2 VMs - a Lab VM, and Controller VM.  We have bridged the VMs enabling the application tier to communicate with the controller using Ravello's internal network.
 
 [https://cloud.ravellosystems.com/#/0/library/blueprints/85825688/canvas](https://cloud.ravellosystems.com/#/0/library/blueprints/85825688/canvas)
 
@@ -337,9 +337,14 @@ We haven't enabled the user to have SSH access to the Ravello box, go ahead and 
 
 ## Server Visibility Monitoring (SVM)
 
-**appdynamics-machine-agent.rpm** has been staged to ~/artifacts.  Install, configure and start server monitoring using the RPM package.
+To start, you'll need to stage the SVM agent to the Ravello lab host.  You can do this by downloading the SVM agent and staging it to the lab host via SCP:
 
-Set the Unique Host ID property to ***AWS-WEST-SE-DEVOPS-1*** and make sure the full SIM (SVM) agent capabilities are enabled.
+```
+OSX: steve.sturtevant@osxltsturt.local in ~/Tools/Ravello
+🐳  scp -i keys/4_3_Enablement.pem ~/Downloads/MachineAgent-4.3.xyz ubuntu@sebootcamplab-sebootcamplab4337s-wgtlisfu.srv.ravcloud.com
+```
+
+Note that when you configure the agent, you'll need to set the Unique Host ID property to ***AWS-WEST-SE-DEVOPS-1*** and make sure the full SIM (SVM) agent capabilities are enabled.
 
 In order to get full credit, the name of the Server must be SE-LAB and it must be organized into the BOOTCAMP hierarchy.
 
@@ -503,6 +508,15 @@ While you could create a rule that applies to all tiers in the application, our 
 ## SVM Docker Visibility Monitoring
 
 Install and configure the SVM Agent so that it gives you visibility into the performance of the underlying Docker containers.
+
+You can add the machine agent into the docker environment, by updating the docker-compose file and then restarting the application.
+
+```
+ubuntu@sebootcamplab:~/SE-LAB-BOOTCAMP/lab/source$ ls docker-compose.yml
+
+docker-compose.yml
+
+```
 
 ## Is it the Database or the Application?
 
