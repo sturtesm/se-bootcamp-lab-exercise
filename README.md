@@ -12,7 +12,7 @@ After installing the controller, lab owners or participants should load the ***l
 
 The ***se-botcamp-lab-4.3-v1.2-bp*** Ravello lab blueprint contains 2 VMs - a Lab VM, and Controller VM.  We have bridged the VMs enabling the application tier to communicate with the controller using Ravello's internal network.
 
-[https://cloud.ravellosystems.com/#/0/library/blueprints/83624181/canvas](https://cloud.ravellosystems.com/#/0/library/blueprints/83624181/canvas)
+[https://cloud.ravellosystems.com/#/0/library/blueprints/85825688/canvas](https://cloud.ravellosystems.com/#/0/library/blueprints/85825688/canvas)
 
 ![4.3 Controller](images/ravello-lab-canvas.png)
 
