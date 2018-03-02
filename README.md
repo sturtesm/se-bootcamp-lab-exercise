@@ -1,20 +1,19 @@
 # SE-LAB-BOOTCAMP
 Repository for the SE Bootcamp Lab
 
+# Setting up the Lab
+
+After installing the controller, lab owners or participants should load the ***~/SE-LAB-BOOTCAMP/lab/artifacts/controller-app-config-lab-default.xml*** configuration into the controller.  This is the base application config we ***MUST*** begin with to start the lab.
+
 # Lab Pre-Reqs
-
-## Setting up the Lab
-
-After installing the controller, lab owners or participants should load the ***lab/artifacts/controller-app-config-lab-default.xml*** configuration into the controller.  This is the base application config we should begin with to start the lab.
-
 
 ## Ravello Blueprint
 
-The ***se-bootcamp-lab-4.3.3.7-bp*** Ravello lab blueprint contains 2 VMs - a Lab VM, and Controller VM.  We have bridged the VMs enabling the application tier to communicate with the controller using Ravello's internal network.
+The ***sse-bootcamp-lab-sturtevant-4.4.1-bp*** Ravello lab blueprint contains 2 VMs - a Lab VM, and Controller VM.  We have bridged the VMs enabling the application tier to communicate with the controller using Ravello's internal network.
 
 [https://cloud.ravellosystems.com/#/0/library/blueprints/85825688/canvas](https://cloud.ravellosystems.com/#/0/library/blueprints/85825688/canvas)
 
-![4.3 Controller](images/ravello-lab-canvas.png)
+![4.4 Controller](images/ravello-lab-canvas.png)
 
 
 ### Ravello Hostnames
@@ -74,26 +73,26 @@ ssh -i 4_3_Enablement.pem ubuntu@seenablementbootca-seenablementbootca-jxgau5cv.
 All artifacts needed for your lab have been pre-staged to the `artifacts` folder; for example:
 
 ```
-ubuntu@seenablementbootca:~$ ls -l artifacts/
-total 900268
--rw-r--r-- 1 ubuntu ubuntu  16185484 Mar 30 01:31 AppServerAgent-4.3.0.0.zip
--rw-r--r-- 1 ubuntu ubuntu 819171319 Mar 30 01:38 controller_64bit_linux-4.3.0.0.sh
--rw-r--r-- 1 ubuntu ubuntu  86506512 Mar 30 01:39 dbagent-4.3.0.0.zip
+ubuntu@sebootcamplab:~/artifacts/4.4.1$ ls -alt
+
+-rw-r--r-- 1 ubuntu ubuntu 174580373 Mar  2 01:18 machineagent-bundle-64bit-linux-4.4.1.570.zip
+-rw-r--r-- 1 ubuntu ubuntu  16994965 Mar  2 01:17 AppServerAgent-4.4.1.21006.zip
+-rw-r--r-- 1 ubuntu ubuntu   2289324 Mar  2 01:15 appd-netviz-x64-linux-4.4.1.486.zip
+
+ubuntu@sebootcamplab:~/artifacts/4.4.1$
 ```
 
 You should use the ***LATEST*** installation artifacts available.
 
 ## Installing the Controller
 
-***CHECK WITH YOUR LAB LEADER TO VALIDATE THIS STEP IS NEEDED***
+If it hasn't already been done, start by installing the controller into `/opt/appdynamics/controller`.
 
-Check with your lab leader first.  If it hasn't already been done, start by installing the controller into `/opt/appdynamics/controller`.
-
-You'll find a 4.3 distribution pre-staged in the `artifacts` sub-folder, and should find clear documentation on [https://docs.appdynamics.com/](https://docs.appdynamics.com/).
+You'll find a 4.4 distribution pre-staged in the `artifacts` sub-folder, and should find clear documentation on [https://docs.appdynamics.com/](https://docs.appdynamics.com/).
 
 It should take you less than 20-minutes to install the controller.  When you're done, login to the controller and show a lab helper that you've completed the first step.
 
-![4.3 Controller](images/appd-43-controller.png)
+![4.4 Controller](images/appd-43-controller.png)
 
 <p><p>
 
@@ -104,6 +103,7 @@ YOU MUST UPDATE THE LICENSE FILE to complete the Controller Installation
 ```
 
 ### Hints
+* For this lab exercise, using a demo profile will be acceptable
 * Our customer is OK with the default ports, no changes are needed
 * Make sure to document all usernames and passwords that you create
 * Licenses can be downloaded from the AppDynamics self-service license portal
@@ -114,6 +114,10 @@ YOU MUST UPDATE THE LICENSE FILE to complete the Controller Installation
 * We're going to monitor 1 application with less than 15-nodes, what controller profile(s) could we choose and why?
 * What resources on our machine should we validate to choose a profile, where can we find the pre-reqs listed in the documentation?
 * Do we have to install the controller as *root*?
+
+## Importing the Application Configuration
+
+After installing the controller, lab owners or participants should load the ***~/SE-LAB-BOOTCAMP/lab/artifacts/controller-app-config-lab-default.xml*** configuration into the controller.  This is the base application config we ***MUST*** begin with to start the lab.
 
 ## Installing the Application
 
@@ -150,10 +154,9 @@ drwxrwxr-x 8 ubuntu ubuntu 4096 Apr  1 15:58 db-agent
 ```
 
 We've also given `777` permisions on */opt/appdynamics/agent* which is not typical for installations, but needed for the lab setup specifically.
- 
+
 ### Configuring the Agent => Controller Connection
- 
-***CHECK WITH YOUR LAB LEADER TO VALIDATE THIS STEP IS NEEDED***
+
 
 We need to configure the Agent to talk to the Controller we've installed on the localhost by updating the App Agent's *controller-info.xml* file.  
 
@@ -208,11 +211,11 @@ Running ${APP_HOME}/source/start-lab.sh will start the lab.  The script expects 
 ./start-lab.sh -a /opt/appdynamics/agent/appserver-agent -b /opt/appdynamics/agent/analytics-agent
 ```
 
-To make things a little easier, we've also added a helper script 
+To make things a little easier, we've also added a helper script
 
 **ubuntu@sebootcamplab:~/SE-LAB-BOOTCAMP/lab/source$ ./start-lab-helper.sh**
 
-which wil start the lab automatically, passing in the right 
+which wil start the lab automatically, passing in the right
 
 The application often takes between 2->3 minutes to fully come up, especially on a Ravello instance.
 
@@ -240,7 +243,7 @@ devops-user-mysql               docker-entrypoint.sh mysqld      Exit 137
 #Tails all log files
 ubuntu@seenablementbootca:~/SE-LAB-BOOTCAMP/lab/source$ docker-compose logs -f
 
-OR 
+OR
 
 #tails logs for 1 service
 ubuntu@seenablementbootca:~/SE-LAB-BOOTCAMP/lab/source$ docker-compose logs -f <service>
@@ -455,11 +458,11 @@ Instead of ``http://<hostname>:<port>`` they want the remote services to be iden
 
 ## Browser Real User Monitoring (BRUM)
 
-Our dev and operations team want to understand true user response-time, and be able to detect and breakdown client vs backend service times. 
+Our dev and operations team want to understand true user response-time, and be able to detect and breakdown client vs backend service times.
 
 The application dev team has pointed Ops to a simple enhnancement to enablement Browser Real User Monitoring (RUM) by updating the home page, and a base JSP file.
 
-### Enabling Browser RUM on our Lab Application* 
+### Enabling Browser RUM on our Lab Application*
 
 There are multiple approaches to enabling Browser RUM, for the purpose of our lab we'll modify our source code directly.
 
@@ -479,7 +482,7 @@ After the app is back up (approximately 3-minutes) navigate through the app - *h
 
 * Using a browser developer tool (like Firebug, or Chrome Developer Tools) find and describe the 2 mandatory javascript files that you can use to determine RUM is correctly enabled.
 * Demonstrate that Browser RUM is working by showing the Browser App Dashboard
- 
+
 
 ## Mongo DB Exit Point
 
@@ -564,7 +567,7 @@ What can we do in the user interface to resolve this issue, what configuration c
 * ***AND*** explain how you got this picture
 
 #### BONUS (+50 points)
-What feature in AppDynamics could help troubleshoot and resolve this problem, ***show*** a lab leader how you could use this to explore your solution. 
+What feature in AppDynamics could help troubleshoot and resolve this problem, ***show*** a lab leader how you could use this to explore your solution.
 
 `You must show this in action to get full credit.`
 
@@ -604,7 +607,7 @@ However, the **Map<String, String>** object is available, with the correlator, i
 
 Although it is already done for you in the lab, build the cust correlation need to properly correlate the upstream calls.  Be prepared to show and explain your work.
 
- 
+
 ```
 
 package com.appdynamics.sample.service;
@@ -620,36 +623,36 @@ import org.apache.log4j.Logger;
 public abstract class DataServices {
 
 	Logger logger = Logger.getLogger(DataServices.class);
-	
+
 	/**
 	 * process the request context so we can create correlation
 	 */
 	public Map<String, String> processRequestContext(HttpServletRequest context) {
 		Enumeration<String> headers = context.getHeaderNames();
-		
+
 		Map<String, String> map = new HashMap<String, String> ();
 
 		while (headers.hasMoreElements()) {
 			String key = headers.nextElement();
 			String value = context.getHeader(key);
-			
+
 			logger.debug("Adding header " + key + "=" + value + " to Map");
-			
+
 			map.put(key, value);
 		}
-		
-		return map;	
+
+		return map;
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * @param requestContext
 	 */
 	public String getUserProfile(Map<String, String> requestContextMap)
 	{
 		return getUserProfileImpl(requestContextMap);
 	}
-	
+
 	protected abstract String getUserProfileImpl(Map<String, String> requestContextMap);
 }
 ```
