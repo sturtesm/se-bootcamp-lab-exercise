@@ -9,7 +9,7 @@ After installing the controller, lab owners or participants should load the ***~
 
 ## Ravello Blueprint
 
-The ***sse-bootcamp-lab-sturtevant-4.4.1-bp*** Ravello lab blueprint contains 2 VMs - a Lab VM, and Controller VM.  We have bridged the VMs enabling the application tier to communicate with the controller using Ravello's internal network.
+The ***sen-bootcamp-lab-4.4.1-2018-06-18*** Ravello lab blueprint contains 2 VMs - a Lab VM, and Controller VM.  We have bridged the VMs enabling the application tier to communicate with the controller using Ravello's internal network.
 
 [https://cloud.ravellosystems.com/#/0/library/blueprints/85825688/canvas](https://cloud.ravellosystems.com/#/0/library/blueprints/85825688/canvas)
 
@@ -50,7 +50,7 @@ Each lab participant will be given a unique Ravello Application Instance, which 
 
 If your instance is stopped, which will typically happen each night, all configuration and progress will be saved provided you don't delete your application from Ravello all together.
 
-To start your instance, you can log into the SE Ravello Account [https://www.ravellosystems.com/](https://www.ravellosystems.com/), find your dedicated application instance and simply restart it.  **OR**, if you weren't given a dedicated instance simply create a new application instance of the **se-enablement-bootcamp-4.3-bp**.
+To start your instance, you can log into the SE Ravello Account [https://www.ravellosystems.com/](https://www.ravellosystems.com/), find your dedicated application instance and simply restart it.  **OR**, if you weren't given a dedicated instance simply create a new application instance of the **sen-bootcamp-lab-4.4.1-2018-06-18**.
 
 **NOTE** The instance may take a few minutes to start, which is normal.
 
