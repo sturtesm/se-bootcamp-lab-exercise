@@ -299,7 +299,7 @@ Update the **Java Discovery Rule** that is tied to the default scope, to name Bu
 The operations team we're working with struggles to get visibility into their backend database.  Setup database monitoring and create a collector to connect to the MySQL instance, using the following connection info:
 
 * **HOST** localhost
-* **USER** monitor
+* **USER** root
 * **PORT** 3306
 * **PASSWORD** l3tm31n
 
@@ -414,7 +414,7 @@ Create a ***Custom Naming Rule*** that is applied to ***only*** to the ***docker
 ![Account Lookup BT Split](images/appd-43-account-lookup-split.png)
 
 
-###Challenge Sign-off Requirements
+### Challenge Sign-off Requirements
 * Does the naming rule split requests to account lookup based on whether they hit MySQL or MongoDB?
 * Is the rule scoped to only the web tier?
 * Does the rule apply to just the accountLookup requests?
@@ -428,7 +428,7 @@ How can I test the rule I'm creating in real-time to understand if it will work 
 
 Our users are complaining about a lot of errors with a specific application function.  Use AppDynamics to identify the 1 Business Transaction with the highest error rate, and then diagnose and report on the root-cause failure.
 
-###Challenge Sign-off Requirements
+### Challenge Sign-off Requirements
 * Correctly identify the worst BT in terms of errors
 * Diagnose the root-cause of the error problem
 * In addition to the root-cause, show the trend of the error over time so our team can understand how long this has been occurring.
@@ -478,7 +478,7 @@ After the app is back up (approximately 3-minutes) navigate through the app - *h
 ![Browser Dashboard](images/appd-43-eum-dashboard.png)
 
 
-###Challenge Sign-off Requirements
+### Challenge Sign-off Requirements
 
 * Using a browser developer tool (like Firebug, or Chrome Developer Tools) find and describe the 2 mandatory javascript files that you can use to determine RUM is correctly enabled.
 * Demonstrate that Browser RUM is working by showing the Browser App Dashboard
@@ -498,7 +498,7 @@ Our dev team is using a Mongo Client Framework, there are several points in the 
 
 While you could create a rule that applies to all tiers in the application, our dev team's feedback is that you really only need to create the rule against the ***docker-data-services-v2*** Tier.
 
-###Challenge Sign-off Requirements
+### Challenge Sign-off Requirements
 
 * Is MongoDB clearly shown on the flow-map
 * Do I have a dashboard that shows:
@@ -558,7 +558,7 @@ This tells us that we expect to set an instrumentation point on the ***DataServi
 
 What can we do in the user interface to resolve this issue, what configuration could be ***masking*** this instrumenntation and breaking our correlation?
 
-###Challenge Sign-off Requirements
+### Challenge Sign-off Requirements
 
 * Show us the fow-map with correlation across the web and data-services tiers.
 
